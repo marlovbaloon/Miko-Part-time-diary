@@ -23,17 +23,252 @@
         #game-container {
             width: 640px;
             height: 360px;
-            background-color: #000000;
+            background: linear-gradient(180deg, #5a3228 0%, #c86e46 50%, #ffbe78 100%);
             position: relative;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             border: 2px solid #29292e;
+            overflow: hidden;
+        }
+
+        /* --- Rising Sun --- */
+        .morning-sun {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle, #fffae1 0%, #ffebbe 60%, rgba(255,150,90,0.4) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 45px rgba(255, 180, 100, 0.6);
+            animation: sun-pulse 6s ease-in-out infinite alternate;
+            z-index: 1;
+        }
+        @keyframes sun-pulse {
+            0% { transform: translate(-50%, -50%) scale(0.95); }
+            100% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        /* --- Morning Mist / Haze --- */
+        .mist-band {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            background: linear-gradient(90deg, rgba(255,220,180,0), rgba(255,220,180,0.35) 50%, rgba(255,220,180,0));
+            z-index: 2;
+            pointer-events: none;
+        }
+        .mist-1 { top: 52%; animation: mist-drift 8s ease-in-out infinite alternate; }
+        .mist-2 { top: 58%; animation: mist-drift 10s ease-in-out infinite alternate-reverse; }
+        @keyframes mist-drift {
+            0% { transform: translateX(-15px); }
+            100% { transform: translateX(15px); }
+        }
+
+        /* --- Torii Gate Silhouette CSS --- */
+        .torii-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 260px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .torii-top-beam {
+            position: absolute;
+            top: 20px;
+            left: -30px;
+            width: 280px;
+            height: 14px;
+            background-color: #c8372d;
+            border-top: 3px solid #f5c87c;
+            border-bottom: 3px solid #78191e;
+        }
+        .torii-second-beam {
+            position: absolute;
+            top: 48px;
+            left: -10px;
+            width: 240px;
+            height: 9px;
+            background-color: #c8372d;
+            border-bottom: 3px solid #78191e;
+        }
+        .torii-pillar-left, .torii-pillar-right {
+            position: absolute;
+            top: 35px;
+            width: 16px;
+            height: 230px;
+            background-color: #c8372d;
+            border-left: 3px solid #f5c87c;
+            border-right: 3px solid #78191e;
+        }
+        .torii-pillar-left { left: 25px; }
+        .torii-pillar-right { right: 25px; }
+        .torii-plaque {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 18px;
+            background: #281919;
+            border: 2px solid #f5c87c;
+        }
+
+        /* --- Sakura Petals Falling --- */
+        .petal {
+            position: absolute;
+            background-color: #ffd7e1;
+            border-radius: 60% 40% 60% 40%;
+            opacity: 0.8;
+            z-index: 4;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-20px) rotate(0deg); }
+            100% { transform: translateY(380px) rotate(360deg); }
+        }
+
+        /* --- UI Overlay & Title --- */
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 30px;
+            z-index: 10;
+        }
+        .game-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3c1914;
+            text-shadow: 1px 1px 0px #ffe6a0, -1px -1px 0px #ffe6a0;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 4px;
+            animation: title-bob 3s ease-in-out infinite alternate;
+        }
+        @keyframes title-bob {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-3px); }
+        }
+        .game-subtitle {
+            font-size: 13px;
+            color: #5a321e;
+            letter-spacing: 1px;
+            margin-bottom: 35px;
+        }
+
+        /* --- Washi Paper Buttons --- */
+        .menu-btn {
+            position: relative;
+            width: 200px;
+            height: 42px;
+            background-color: #faf0dc;
+            border: 2px solid #c8372d;
+            border-radius: 8px;
+            color: #231414;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-btn:hover {
+            background-color: #fff5e6;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 190, 100, 0.8);
+            border-color: #e6453b;
+            color: #502014;
+        }
+        .menu-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 15px;
+            width: calc(100% - 30px);
+            height: 2px;
+            background-color: #c8372d;
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
+        }
+        .menu-btn:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* --- Footer Credit --- */
+        .game-footer {
+            position: absolute;
+            bottom: 8px;
+            font-size: 11px;
+            color: rgba(90, 50, 30, 0.8);
+            z-index: 10;
         }
     </style>
 </head>
 <body>
-    <div id="game-container"></div>
+    <div id="game-container">
+        <!-- Background Elements (จาก C/Raylib แปลงเป็น CSS) -->
+        <div class="morning-sun"></div>
+        <div class="mist-band mist-1"></div>
+        <div class="mist-band mist-2"></div>
+        
+        <div class="torii-container">
+            <div class="torii-top-beam"></div>
+            <div class="torii-second-beam"></div>
+            <div class="torii-pillar-left"></div>
+            <div class="torii-pillar-right"></div>
+            <div class="torii-plaque"></div>
+        </div>
 
-    <!-- Include Phaser 3 from CDN -->
+        <!-- Sakura Petals Generated via JS snippet below -->
+        <div id="petals-container"></div>
+
+        <!-- UI & Menu -->
+        <div class="ui-overlay">
+            <h1 class="game-title">MIKO PART-TIME</h1>
+            <div class="game-subtitle">~ Demo Version ~</div>
+            
+            <button class="menu-btn" id="start-btn">START</button>
+            <button class="menu-btn" id="exit-btn">EXIT</button>
+        </div>
+
+        <div class="game-footer">A Marlov Demo</div>
+    </div>
+
+    <!-- Script สำหรับสร้างกลีบซากุระร่วง และเชื่อมต่อ Phaser/Main JS -->
+    <script>
+        // สร้างกลีบดอกไม้จำลองสไตล์ Raylib Petals
+        const container = document.getElementById('petals-container');
+        for (let i = 0; i < 35; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const size = Math.random() * 5 + 4;
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size * 1.4}px`;
+            petal.style.left = `${Math.random() * 640}px`;
+            petal.style.top = `${Math.random() * -360}px`;
+            petal.style.animationDuration = `${Math.random() * 4 + 3}s`;
+            petal.style.animationDelay = `${Math.random() * 5}s`;
+            container.appendChild(petal);
+        }
+    </script>
+-0yh 
+    <!-- Include Phaser 3 from local -->
     <script src="phaser3.js"></script>
     
     <!-- Main game script entry -->
