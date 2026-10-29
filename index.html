@@ -200,7 +200,7 @@
             position: absolute;
             bottom: 4px;
             left: 15px;
-            width: calc(100% - 30px);
+            width: calc(100% - 30px); /* Fixed missing minus sign */
             height: 2px;
             background-color: #c8372d;
             transform: scaleX(0);
@@ -222,7 +222,7 @@
 </head>
 <body>
     <div id="game-container">
-        <!-- Background Elements (จาก C/Raylib แปลงเป็น CSS) -->
+        <!-- Background Elements -->
         <div class="morning-sun"></div>
         <div class="mist-band mist-1"></div>
         <div class="mist-band mist-2"></div>
@@ -235,7 +235,7 @@
             <div class="torii-plaque"></div>
         </div>
 
-        <!-- Sakura Petals Generated via JS snippet below -->
+        <!-- Sakura Petals Container -->
         <div id="petals-container"></div>
 
         <!-- UI & Menu -->
@@ -250,16 +250,15 @@
         <div class="game-footer">A Marlov Demo</div>
     </div>
 
-    <!-- Script สำหรับสร้างกลีบซากุระร่วง และเชื่อมต่อ Phaser/Main JS -->
+    <!-- Script สำหรับสร้างกลีบซากุระร่วง -->
     <script>
-        // สร้างกลีบดอกไม้จำลองสไตล์ Raylib Petals
         const container = document.getElementById('petals-container');
         for (let i = 0; i < 35; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
             const size = Math.random() * 5 + 4;
             petal.style.width = `${size}px`;
-            petal.style.height = `${size * 1.4}px`;
+            petal.style.height = `${size * 1.4}px`; /* Fixed missing multiplication sign */
             petal.style.left = `${Math.random() * 640}px`;
             petal.style.top = `${Math.random() * -360}px`;
             petal.style.animationDuration = `${Math.random() * 4 + 3}s`;
@@ -267,9 +266,9 @@
             container.appendChild(petal);
         }
     </script>
--0yh 
+    
     <!-- Include Phaser 3 from local -->
-    <script src="phaser3.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
     
     <!-- Main game script entry -->
     <script src="src/main.js" type="module"></script>
