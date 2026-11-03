@@ -1,100 +1,61 @@
+-- main.lua
+local anim = require("libraries.anim8")
+local Camera = require("libraries.camera")
+local Vector = require("libraries.vector") 
+local kaoru = require("kaoru")
+
+local cam
+local bedroom = {}
+
 function love.load()
-    camera = require 'libraries/camera'
-    cam = camera()
-
-    anim8 = require 'libraries/anim8'
     love.graphics.setDefaultFilter("nearest", "nearest")
+    cam = Camera(kaoru.x, kaoru.y)
+    cam.scale = 2.0 -- ปรับซูมสำหรับแนว Pixel Art
 
-    sti = require 'libraries/sti'
-    gameMap = sti('maps/testMap.lua')
+    -- bedroom
+    bedroom.image = love.graphics.newImage("assets/images/kaoru_bedroom.png")
+    bedroom.width = bedroom.image:getWidth()
+    bedroom.height = bedroom.image:getHeight()
+    bedroom.MAP_WIDTH = bedroom.width
+    bedroom.MAP_HEIGHT = bedroom.height
 
-    player = {}
-    player.x = 400
-    player.y = 200
-    player.speed = 5
-    player.spriteSheet = love.graphics.newImage('aasets/character_playble/kaoru_sheet')
-    player.grid = anim8.newGrid( 16, 32, player.spriteSheet:getWidth(), player.spriteSheet:getHeight() )
-
-    player.animations = {}
-    player.animations.down = anim8.newAnimation( player.grid('1-4', 1), 0.2 )
-    player.animations.left = anim8.newAnimation( player.grid('1-4', 2), 0.2 )
-    player.animations.right = anim8.newAnimation( player.grid('1-4', 3), 0.2 )
-    player.animations.up = anim8.newAnimation( player.grid('1-4', 4), 0.2 )
-
-    player.anim = player.animations.left
-
-    background = love.graphics.newImage('sprites/background.png')
+    -- โหลดตัวละครคาโอรุ
+    kaoru:load()
 end
 
 function love.update(dt)
-    local isMoving = false
+    -- 1. อัปเดตการเคลื่อนไหวและระบบชนของคาโอรุ
+    kaoru:update(dt, bedroom)
 
-    if love.keyboard.isDown("right") then
-        player.x = player.x + player.speed
-        player.anim = player.animations.right
-        isMoving = true
-    end
+    -- 2. กล้องแบบ Snap ตามติดพิกัดตัวละครทันที
+    cam:lookAt(kaoru.x, kaoru.y)
+end
 
-    if love.keyboard.isDown("left") then
-        player.x = player.x - player.speed
-        player.anim = player.animations.left
-        isMoving = true
-    end
+function love.keypressed(key)
+    -- ส่งอีเวนต์ปุ่มกดไปให้คาโอรุ (ซึ่งจะส่งต่อไปยังเมนูสเตตัสอีกที)
+    kaoru:keypressed(key)
+end
 
-    if love.keyboard.isDown("down") then
-        player.y = player.y + player.speed
-        player.anim = player.animations.down
-        isMoving = true
-    end
-
-    if love.keyboard.isDown("up") then
-        player.y = player.y - player.speed
-        player.anim = player.animations.up
-        isMoving = true
-    end
-
-    if isMoving == false then
-        player.anim:gotoFrame(2)
-    end
-
-    player.anim:update(dt)
-
-    -- Update camera position
-    cam:lookAt(player.x, player.y)
-
-    -- This section prevents the camera from viewing outside the background
-    -- First, get width/height of the game window
-    local w = love.graphics.getWidth()
-    local h = love.graphics.getHeight()
-
-    -- Left border
-    if cam.x < w/2 then
-        cam.x = w/2
-    end
-
-    -- Right border
-    if cam.y < h/2 then
-        cam.y = h/2
-    end
-
-    -- Get width/height of background
-    local mapW = gameMap.width * gameMap.tilewidth
-    local mapH = gameMap.height * gameMap.tileheight
-
-    -- Right border
-    if cam.x > (mapW - w/2) then
-        cam.x = (mapW - w/2)
-    end
-    -- Bottom border
-    if cam.y > (mapH - h/2) then
-        cam.y = (mapH - h/2)
-    end
+function love.gamepadpressed(joystick, button)
+    kaoru:gamepadpressed(joystick, button)
 end
 
 function love.draw()
+    -- เปิดใช้งานกล้อง (World Layer)
     cam:attach()
-        gameMap:drawLayer(gameMap.layers["Ground"])
-        gameMap:drawLayer(gameMap.layers["Trees"])
-        player.anim:draw(player.spriteSheet, player.x, player.y, nil, 6, nil, 6, 9)
+    
+        -- วาดฉากห้องนอน
+        love.graphics.draw(bedroom.image, 0, 0)
+
+        -- วาดตัวละครคาโอรุ
+        kaoru:draw(cam)
+
+    -- ปิดการใช้งานกล้อง
     cam:detach()
+
+    -- วาด UI หรือเมนูด้านบนสุด (Screen Layer)
+    -- ส่งขนาดหน้าจอจริงเข้าไปเพื่อให้ status_menu จัดเลย์เอาต์แบบ Responsive ได้สมบูรณ์
+    if kaoru.status_menu then
+        kaoru.status_menu.draw(love.graphics.getWidth(), love.graphics.getHeight())
+    end
 end
