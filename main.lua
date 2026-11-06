@@ -10,7 +10,7 @@ local bedroom = {}
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     cam = Camera(kaoru.x, kaoru.y)
-    cam.scale = 2.0 -- ปรับซูมสำหรับแนว Pixel Art
+    cam.scale = 2.0 
 
     -- bedroom
     
