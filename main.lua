@@ -13,11 +13,7 @@ function love.load()
     cam.scale = 2.0 -- ปรับซูมสำหรับแนว Pixel Art
 
     -- bedroom
-    bedroom.image = love.graphics.newImage("assets/images/kaoru_bedroom.png")
-    bedroom.width = bedroom.image:getWidth()
-    bedroom.height = bedroom.image:getHeight()
-    bedroom.MAP_WIDTH = bedroom.width
-    bedroom.MAP_HEIGHT = bedroom.height
+    
 
     -- โหลดตัวละครคาโอรุ
     kaoru:load()
